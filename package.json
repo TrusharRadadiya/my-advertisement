@@ -1,6 +1,6 @@
 {
   "name": "com.puzzlerocket.myadvertisment",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "displayName": "My Advertisment",
   "description": "Custom Package Google Mobile Ads and Unity Ads Mediation",
   "dependencies": {
