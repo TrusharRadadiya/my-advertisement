@@ -12,10 +12,7 @@ namespace MyAdvertisement
         
         private void OnValidate()
         {
-            foreach (AdNetworkBase adsNetwork in _adNetworks)
-            {
-                adsNetwork.EnableTesting(_testing);
-            }
+            foreach (AdNetworkBase adsNetwork in _adNetworks) adsNetwork?.EnableTesting(_testing);
         }
 #endif
         #endregion
