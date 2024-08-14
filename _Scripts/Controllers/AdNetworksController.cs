@@ -14,6 +14,11 @@ namespace MyAdvertisement
         {
             foreach (AdNetworkBase adsNetwork in _adNetworks) adsNetwork?.EnableTesting(_testing);
         }
+
+        private void OnDestroy()
+        {
+            foreach (AdNetworkBase adNetwork in _adNetworks) adNetwork?.ResetSettings();
+        }
 #endif
         #endregion
 
