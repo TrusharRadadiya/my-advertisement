@@ -20,6 +20,8 @@ namespace MyAdvertisement
         private int _retryCount;
         private int _continueCount;
         
+        public event Action OnAdAvailable;
+        
         private void Awake()
         {
             _networksController = GetComponent<AdNetworksController>();
@@ -103,6 +105,7 @@ namespace MyAdvertisement
 
         public void OnBannerAdLoadSuccess()
         {
+            OnAdAvailable?.Invoke();
             _continueCount++;
             _retryCount = 0;
 

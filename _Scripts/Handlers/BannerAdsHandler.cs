@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace MyAdvertisement
@@ -14,8 +15,23 @@ namespace MyAdvertisement
             get => PlayerPrefs.GetInt(nameof(BannerRemoved), 0) is 1;
             set => PlayerPrefs.SetInt(nameof(BannerRemoved), value ? 1 : 0);
         }
-
-        public static void Initialize(BannerAdsController controller) => _controller = controller;
+        
+        public static event Action OnAdAvailable;
+        
+        public static void Initialize(BannerAdsController controller)
+        {
+            _controller = controller;
+            _controller.OnAdAvailable += () =>
+            {
+                if (BannerRemoved)
+                {
+                    _controller.DestroyBannerAd();
+                    return;
+                }
+                
+                OnAdAvailable?.Invoke();
+            };
+        }
 
         public static void LoadAd()
         {
@@ -51,5 +67,7 @@ namespace MyAdvertisement
             BannerRemoved = true;
             DestroyAd();
         }
+
+        public static void RestoreAd() => BannerRemoved = false;
     }
 }
