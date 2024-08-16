@@ -22,7 +22,7 @@ namespace MyAdvertisement
                 }
             };
             
-            UnityAds.Advertisement.Banner.SetPosition(UnityAds.BannerPosition.TOP_CENTER);
+            UnityAds.Advertisement.Banner.SetPosition(UnityAds.BannerPosition.BOTTOM_CENTER);
             UnityAds.Advertisement.Banner.Load(AdID, options);
         }
 
