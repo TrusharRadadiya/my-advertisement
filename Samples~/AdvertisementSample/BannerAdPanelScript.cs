@@ -8,6 +8,7 @@ public class BannerAdPanelScript : MonoBehaviour
 
     private void Awake()
     {
+        transform.GetChild(0).gameObject.SetActive(false);
         BannerAdsHandler.OnAdAvailable += OnBannerAdAvailable;
     }
     

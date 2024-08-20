@@ -17,7 +17,7 @@ public class MainMenuScript : MonoBehaviour
     public void OnAdsNetworksInitialized()
     {
         _bannerAdButton.SetActive(true);
-        _interstitialAdButton.SetActive(false);
+        _interstitialAdButton.SetActive(true);
         _adNetworkStatusText.text = "Ad networks initialized!!";
     }
 }
