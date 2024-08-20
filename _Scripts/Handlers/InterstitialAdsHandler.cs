@@ -44,7 +44,6 @@ namespace MyAdvertisement
             if (InterstitialRemoved) return;
             if (!Initialized)
             {
-                Debug.LogError("Interstitial ad handler is not initialized yet!");
                 onClose?.Invoke();
                 return;
             }
