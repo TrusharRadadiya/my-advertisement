@@ -20,7 +20,16 @@ namespace MyAdvertisement
         public static void Initialize(InterstitialAdsController controller)
         {
             _controller = controller;
-            _controller.OnAdAvailable += () => OnAdAvailable?.Invoke();
+            _controller.OnAdAvailable += () =>
+            {
+                if (InterstitialRemoved)
+                {
+                    DestroyAd();
+                    return;
+                }
+
+                OnAdAvailable?.Invoke();
+            };
         }
 
         public static void LoadAd()
@@ -42,6 +51,10 @@ namespace MyAdvertisement
             _controller.ShowInterstitialAd(onClose);
         }
         
-        public static void RemoveAd() => InterstitialRemoved = true;
+        public static void RemoveAd()
+        {
+            InterstitialRemoved = true;
+            DestroyAd();
+        }
     }
 }
