@@ -65,6 +65,7 @@ namespace MyAdvertisement
                 _loadOnNetworkInitialize = true;
                 return;
             }
+            
             if (_interstitialAd.CurrentState is not AdState.Null) return;
             if (_continueCount == _currentAdSettings.ContinueCount)
             {

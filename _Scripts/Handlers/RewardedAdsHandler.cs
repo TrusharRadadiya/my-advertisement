@@ -11,10 +11,24 @@ namespace MyAdvertisement
         
         public static event Action OnAdAvailable;
 
+        private static bool RewardedRemoved
+        {
+            get => PlayerPrefs.GetInt(nameof(RewardedRemoved), 0) is 1;
+            set => PlayerPrefs.SetInt(nameof(RewardedRemoved), value ? 1 : 0);
+        }
+        
         public static void Initialize(RewardedAdsController controller) 
         {
             _controller = controller;
-            _controller.OnAdAvailable += () => OnAdAvailable?.Invoke();
+            _controller.OnAdAvailable += () =>
+            {
+                if (RewardedRemoved)
+                {
+                    DestroyAd();
+                    return;
+                }
+                OnAdAvailable?.Invoke();
+            };
         }
 
         public static void LoadAd()
@@ -27,11 +41,24 @@ namespace MyAdvertisement
         {
             if (!Initialized)
             {
-                Debug.LogError("Rewarded ad handler is not initialized yet!");
                 onClose?.Invoke();
                 return;
             }
             _controller.ShowRewardedAd(onClose, onReward);
         }
+
+        public static void DestroyAd()
+        {
+            if (!Initialized) return;
+            _controller.DestroyRewardedAd();
+        }
+
+        public static void RemoveAd()
+        {
+            RewardedRemoved = true;
+            DestroyAd();
+        }
+
+        public static void RestoreAd() => RewardedRemoved = false;
     }
 }

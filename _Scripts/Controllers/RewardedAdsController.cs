@@ -149,9 +149,21 @@ namespace MyAdvertisement
             _retryCount = 0;
             _onClose?.Invoke();
             _onClose = null;
+            _onReward = null;
+            _rewardedAd.Destroy();
         }
 
         public void OnRewardedAdGiveReward() => _onReward?.Invoke();
+
+        public void DestroyRewardedAd()
+        {
+            if (_rewardedAd.CurrentState is AdState.Null) return;
+            _rewardedAd.Destroy();
+            _continueCount++;
+            _retryCount = 0;
+            _onClose = null;
+            _onReward = null;
+        }
     }
     
     [Serializable]
