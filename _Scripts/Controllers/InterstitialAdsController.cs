@@ -149,6 +149,16 @@ namespace MyAdvertisement
             _retryCount = 0;
             _onClose?.Invoke();
             _onClose = null;
+            _interstitialAd.Destroy();
+        }
+
+        public void DestroyInterstitialAd()
+        {
+            if (_interstitialAd.CurrentState is AdState.Null) return;
+            _interstitialAd.Destroy();
+            _continueCount++;
+            _retryCount = 0;
+            _onClose = null;
         }
     }
     

@@ -49,11 +49,19 @@ namespace MyAdvertisement
             }
             _controller.ShowInterstitialAd(onClose);
         }
+
+        public static void DestroyAd()
+        {
+            if (!Initialized) return;
+            _controller.DestroyInterstitialAd();
+        }
         
         public static void RemoveAd()
         {
             InterstitialRemoved = true;
             DestroyAd();
         }
+
+        public static void RestoreAd() => InterstitialRemoved = false;
     }
 }
