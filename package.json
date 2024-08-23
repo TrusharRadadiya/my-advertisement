@@ -5,7 +5,8 @@
   "description": "Custom Package Google Mobile Ads and Unity Ads Mediation",
   "dependencies": {
     "com.google.ads.mobile": "9.2.0",
-    "com.unity.ads": "4.12.0"
+    "com.unity.ads": "4.12.0",
+    "com.puzzlerocket.myremoteconfig": "https://github.com/TrusharRadadiya/my-remote-config.git"
   },
   "samples": [
     {
