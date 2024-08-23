@@ -9,6 +9,11 @@
    URL: https://package.openupm.com
    Scopes: com.google
    ```
+
+**:point_right: This package uses custom unity remote config package for that install the below package from the package manager using git URL**
+```
+https://github.com/TrusharRadadiya/my-remote-config.git
+```
 ---
 ### After installing package follow these steps to ensure that your project includes all the dependencies:
 1. Go to Project `Settings > Player > Android > Publishing Settings > Build` and select:
