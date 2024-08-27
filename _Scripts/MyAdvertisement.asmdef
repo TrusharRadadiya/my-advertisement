@@ -2,7 +2,8 @@
     "name": "MyAdvertisement",
     "rootNamespace": "MyAdvertisement",
     "references": [
-        "GUID:ff6de30450f3748908ff580f6ec64d9a"
+        "GUID:ff6de30450f3748908ff580f6ec64d9a",
+        "GUID:9d6c7830d9ab746a7a12f144bdeeee7c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

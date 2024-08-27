@@ -8,7 +8,9 @@ namespace MyAdvertisement
     public class BannerAdsController : MonoBehaviour, IBannerAdCallbackListener
     {
         private AdNetworksController _networksController;
-        
+
+        [SerializeField] private bool _enabled = true;
+        [SerializeField] private List<BannerAdBase> _bannerAds = new();
         [SerializeField] private List<BannerAdSettings> _adSettings = new();
         
         private BannerAdSettings _currentAdSettings;
@@ -37,7 +39,7 @@ namespace MyAdvertisement
             _loadOnNetworkInitialize = false;
             LoadBannerAd();
         }
-
+        
         private bool CheckAdNetworkInitialization()
         {
             if (_networksController.Initialized) return true;
@@ -47,7 +49,7 @@ namespace MyAdvertisement
             _networksController.InitializeAdNetworks();
             return false;
         }
-        
+
         private void SetAdSettings()
         {
             _currentAdSettings = _adSettings[_adCounter];
@@ -56,8 +58,31 @@ namespace MyAdvertisement
             _continueCount = 0;
         }
         
+        public void SetRemoteConfig(Configuration configuration)
+        {
+            _enabled = configuration.Show;
+            if (!_enabled)
+            {
+                DestroyBannerAd();
+                return;
+            }
+            
+            _adSettings.Clear();
+            foreach (AdSettings settings in configuration.Settings)
+            {
+                if (!settings.Enabled) continue;
+                BannerAdBase bannerAd = _bannerAds.Find(ad => ad.Provider == settings.Provider);
+                if (bannerAd is null) continue;
+                
+                BannerAdSettings bannerAdSettings = new (bannerAd, settings.Retry, settings.Continue);
+                _adSettings.Add(bannerAdSettings);
+            }
+            SetAdSettings();
+        }
+        
         public void LoadBannerAd()
         {
+            if (!_enabled) return;
             if (!CheckAdNetworkInitialization())
             {
                 _loadOnNetworkInitialize = true;
@@ -91,7 +116,7 @@ namespace MyAdvertisement
                 _adCounter = 0;
                 SetAdSettings();
                 
-                // In once cycle if once the banner ad is shown that repeat otherwise rest until next load call.
+                // In one cycle if once the banner ad is shown then repeat otherwise rest until next load call.
                 if (!_shownOnce) return;
                 _shownOnce = false;
                 LoadBannerAd();
@@ -105,6 +130,12 @@ namespace MyAdvertisement
 
         public void OnBannerAdLoadSuccess()
         {
+            if (!_enabled)
+            {
+                DestroyBannerAd();
+                return;
+            }
+            
             OnAdAvailable?.Invoke();
             _continueCount++;
             _retryCount = 0;
@@ -116,6 +147,7 @@ namespace MyAdvertisement
 
         public void ShowBannerAd()
         {
+            if (!_enabled) return;
             if (!CheckAdNetworkInitialization())
             {
                 _loadOnNetworkInitialize = true;
@@ -146,6 +178,7 @@ namespace MyAdvertisement
 
         public void HideBannerAd()
         {
+            if (!_enabled) return;
             if (!CheckAdNetworkInitialization())
             {
                 _loadOnNetworkInitialize = false;
@@ -174,7 +207,7 @@ namespace MyAdvertisement
             _loadOnNetworkInitialize = false;
             _showOnLoad = false;
             if (!CheckAdNetworkInitialization()) return;
-            if (_bannerAd.CurrentState is not AdState.Loaded) return;
+            if (_bannerAd  is null || _bannerAd.CurrentState is AdState.Null) return;
             _bannerAd.Destroy();
         }
     }
@@ -185,5 +218,12 @@ namespace MyAdvertisement
         [field: SerializeField] public BannerAdBase Ad { get; private set; }
         [field: SerializeField] public int RetryCount { get; private set; }
         [field: SerializeField] public int ContinueCount { get; private set; }
+
+        public BannerAdSettings(BannerAdBase ad, int retryCount, int continueCount)
+        {
+            Ad = ad;
+            RetryCount = retryCount;
+            ContinueCount = continueCount;
+        }
     }
 }

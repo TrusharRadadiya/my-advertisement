@@ -9,6 +9,8 @@ namespace MyAdvertisement
     {
         private AdNetworksController _networksController;
         
+        [SerializeField] private bool _enabled = true;
+        [SerializeField] private List<RewardedAdBase> _rewardedAds = new();
         [SerializeField] private List<RewardedAdSettings> _adSettings = new();
         
         private RewardedAdSettings _currentAdSettings;
@@ -48,7 +50,7 @@ namespace MyAdvertisement
             _networksController.InitializeAdNetworks();
             return false;
         }
-        
+
         private void SetAdSettings()
         {
             _currentAdSettings = _adSettings[_adCounter];
@@ -56,9 +58,32 @@ namespace MyAdvertisement
             _retryCount = 0;
             _continueCount = 0;
         }
-        
+
+        public void SetRemoteConfig(Configuration configuration)
+        {
+            _enabled = configuration.Show;
+            if (!_enabled)
+            {
+                DestroyRewardedAd();
+                return;
+            }
+            
+            _adSettings.Clear();
+            foreach (AdSettings settings in configuration.Settings)
+            {
+                if (!settings.Enabled) continue;
+                RewardedAdBase rewardedAd = _rewardedAds.Find(ad => ad.Provider == settings.Provider);
+                if (rewardedAd is null) continue;
+                
+                RewardedAdSettings rewardedAdSettings = new (rewardedAd, settings.Retry, settings.Continue);
+                _adSettings.Add(rewardedAdSettings);
+            }
+            SetAdSettings();
+        }
+
         public void LoadRewardedAd()
         {
+            if (!_enabled) return;
             if (!CheckAdNetworkInitialization())
             {
                 _loadOnNetworkInitialize = true;
@@ -107,6 +132,13 @@ namespace MyAdvertisement
         
         public void ShowRewardedAd(Action onClose, Action onReward)
         {
+            if (!_enabled)
+            {
+                DestroyRewardedAd();
+                onClose?.Invoke();
+                return;
+            }
+            
             if (!CheckAdNetworkInitialization())
             {
                 _loadOnNetworkInitialize = true;
@@ -157,7 +189,7 @@ namespace MyAdvertisement
 
         public void DestroyRewardedAd()
         {
-            if (_rewardedAd.CurrentState is AdState.Null) return;
+            if (_rewardedAd is null || _rewardedAd.CurrentState is AdState.Null) return;
             _rewardedAd.Destroy();
             _continueCount++;
             _retryCount = 0;
@@ -172,5 +204,12 @@ namespace MyAdvertisement
         [field: SerializeField] public RewardedAdBase Ad { get; private set; }
         [field: SerializeField] public int RetryCount { get; private set; }
         [field: SerializeField] public int ContinueCount { get; private set; }
+
+        public RewardedAdSettings(RewardedAdBase ad, int retryCount, int continueCount)
+        {
+            Ad = ad;
+            RetryCount = retryCount;
+            ContinueCount = continueCount;
+        }
     }
 }

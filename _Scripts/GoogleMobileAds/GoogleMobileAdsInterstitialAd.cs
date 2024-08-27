@@ -9,6 +9,7 @@ namespace MyAdvertisement
         private readonly string TestAndroidAdID = "ca-app-pub-3940256099942544/1033173712";
         private readonly string TestiOSAdID = "ca-app-pub-3940256099942544/4411468910";
 
+        public override AdsProvider Provider => AdsProvider.Google;
         protected override string AdID =>
             AdNetwork.Testing ? Application.platform is RuntimePlatform.Android ? TestAndroidAdID : TestiOSAdID : base.AdID;
 

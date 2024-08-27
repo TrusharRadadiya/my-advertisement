@@ -3,6 +3,7 @@ namespace MyAdvertisement
     public abstract class InterstitialAdBase: AdBase
     {
         protected IInterstitialAdCallbackListener _interstitialAdCallback;
+        public virtual AdsProvider Provider { get; protected set; }
         
         public abstract void Load(IInterstitialAdCallbackListener listener);
         public abstract void OnLoadFail();

@@ -6,6 +6,8 @@ namespace MyAdvertisement
     [CreateAssetMenu(fileName = "UnityAdsBannerAd", menuName = "My Advertisement/Unity Ads/Banner Ad", order = 2)]
     public class UnityAdsBannerAd : BannerAdBase
     {
+        public override AdsProvider Provider => AdsProvider.Unity;
+        
         public override void Load(IBannerAdCallbackListener listener)
         {
             Destroy();

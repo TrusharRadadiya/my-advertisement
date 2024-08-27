@@ -3,6 +3,8 @@ namespace MyAdvertisement
     public abstract class RewardedAdBase: AdBase
     {
         protected IRewardAdCallbackListener _rewardAdCallback;
+        
+        public virtual AdsProvider Provider { get; protected set; }
 
         public abstract void Load(IRewardAdCallbackListener listener);
         public abstract void OnLoadFail();

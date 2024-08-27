@@ -3,6 +3,7 @@ namespace MyAdvertisement
     public abstract class BannerAdBase: AdBase
     {
         protected IBannerAdCallbackListener _bannerAdCallback;
+        public virtual AdsProvider Provider { get; protected set; }
         
         public abstract void Load(IBannerAdCallbackListener listener);
         public abstract void OnLoadFail();

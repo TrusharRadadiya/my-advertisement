@@ -6,6 +6,8 @@ namespace MyAdvertisement
     [CreateAssetMenu(fileName = "UnityAdsInterstitialAd", menuName = "My Advertisement/Unity Ads/Interstitial Ad", order = 3)]
     public class UnityInterstitialAd : InterstitialAdBase, UnityAds.IUnityAdsLoadListener, UnityAds.IUnityAdsShowListener
     {
+        public override AdsProvider Provider => AdsProvider.Unity;
+        
         public override void Load(IInterstitialAdCallbackListener listener)
         {
             Destroy();

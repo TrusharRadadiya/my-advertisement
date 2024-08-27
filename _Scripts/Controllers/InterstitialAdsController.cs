@@ -8,9 +8,11 @@ namespace MyAdvertisement
     public class InterstitialAdsController : MonoBehaviour, IInterstitialAdCallbackListener
     {
         private AdNetworksController _networksController;
-        
+
+        [SerializeField] private bool _enabled = true;
+        [SerializeField] private List<InterstitialAdBase> _interstitialAds = new();
         [SerializeField] private List<InterstitialAdSettings> _adSettings = new();
-        
+
         private InterstitialAdSettings _currentAdSettings;
         private InterstitialAdBase _interstitialAd;
         private bool _loadOnNetworkInitialize;
@@ -58,8 +60,31 @@ namespace MyAdvertisement
             _continueCount = 0;
         }
         
+        public void SetRemoteConfig(Configuration configuration)
+        {
+            _enabled = configuration.Show;
+            if (!_enabled)
+            {
+                DestroyInterstitialAd();
+                return;
+            }
+            
+            _adSettings.Clear();
+            foreach (AdSettings settings in configuration.Settings)
+            {
+                if (!settings.Enabled) continue;
+                InterstitialAdBase interstitialAd = _interstitialAds.Find(ad => ad.Provider == settings.Provider);
+                if (interstitialAd is null) continue;
+                
+                InterstitialAdSettings interstitialAdSettings = new (interstitialAd, settings.Retry, settings.Continue);
+                _adSettings.Add(interstitialAdSettings);
+            }
+            SetAdSettings();
+        }
+        
         public void LoadInterstitialAd()
         {
+            if (!_enabled) return;
             if (!CheckAdNetworkInitialization())
             {
                 _loadOnNetworkInitialize = true;
@@ -109,6 +134,13 @@ namespace MyAdvertisement
 
         public void ShowInterstitialAd(Action onClose)
         {
+            if (!_enabled)
+            {
+                DestroyInterstitialAd();
+                onClose?.Invoke();
+                return;
+            }
+            
             if (!CheckAdNetworkInitialization())
             {
                 _loadOnNetworkInitialize = true;
@@ -139,6 +171,7 @@ namespace MyAdvertisement
         
         public void OnInterstitialAdShowFail()
         {
+            if (!_enabled) return;
             _onClose?.Invoke();
             _onClose = null;
             OnInterstitialAdLoadFail();
@@ -155,7 +188,7 @@ namespace MyAdvertisement
 
         public void DestroyInterstitialAd()
         {
-            if (_interstitialAd.CurrentState is AdState.Null) return;
+            if (_interstitialAd is null || _interstitialAd.CurrentState is AdState.Null) return;
             _interstitialAd.Destroy();
             _continueCount++;
             _retryCount = 0;
@@ -169,5 +202,12 @@ namespace MyAdvertisement
         [field: SerializeField] public InterstitialAdBase Ad { get; private set; }
         [field: SerializeField] public int RetryCount { get; private set; }
         [field: SerializeField] public int ContinueCount { get; private set; }
+
+        public InterstitialAdSettings(InterstitialAdBase ad, int retryCount, int continueCount)
+        {
+            Ad = ad;
+            RetryCount = retryCount;
+            ContinueCount = continueCount;
+        }
     }
 }
