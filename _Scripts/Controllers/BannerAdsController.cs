@@ -22,7 +22,7 @@ namespace MyAdvertisement
         private int _retryCount;
         private int _continueCount;
         
-        public event Action OnAdAvailable;
+        public event Action<AdsProvider> OnAdAvailable;
         
         private void Awake()
         {
@@ -136,7 +136,7 @@ namespace MyAdvertisement
                 return;
             }
             
-            OnAdAvailable?.Invoke();
+            OnAdAvailable?.Invoke(_bannerAd.Provider);
             _continueCount++;
             _retryCount = 0;
 

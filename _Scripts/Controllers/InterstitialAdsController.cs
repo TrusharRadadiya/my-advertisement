@@ -21,7 +21,7 @@ namespace MyAdvertisement
         private int _retryCount;
         private int _continueCount;
 
-        private Action _onClose;
+        private Action<AdsProvider> _onClose;
         
         public bool AdAvailable => _interstitialAd?.CurrentState is AdState.Loaded;
         public event Action OnAdAvailable;
@@ -132,12 +132,12 @@ namespace MyAdvertisement
 
         public void OnInterstitialAdLoadSuccess() => OnAdAvailable?.Invoke();
 
-        public void ShowInterstitialAd(Action onClose)
+        public void ShowInterstitialAd(Action<AdsProvider> onClose)
         {
             if (!_enabled)
             {
                 DestroyInterstitialAd();
-                onClose?.Invoke();
+                onClose?.Invoke(AdsProvider.Null);
                 return;
             }
             
@@ -151,11 +151,11 @@ namespace MyAdvertisement
             {
                 case AdState.Null:
                     LoadInterstitialAd();
-                    onClose?.Invoke();
+                    onClose?.Invoke(AdsProvider.Null);
                     break;
                 
                 case AdState.Loading:
-                    onClose?.Invoke();
+                    onClose?.Invoke(AdsProvider.Null);
                     break;
                 
                 case AdState.Loaded:
@@ -172,7 +172,7 @@ namespace MyAdvertisement
         public void OnInterstitialAdShowFail()
         {
             if (!_enabled) return;
-            _onClose?.Invoke();
+            _onClose?.Invoke(AdsProvider.Null);
             _onClose = null;
             OnInterstitialAdLoadFail();
         }
@@ -181,7 +181,7 @@ namespace MyAdvertisement
         {
             _continueCount++;
             _retryCount = 0;
-            _onClose?.Invoke();
+            _onClose?.Invoke(_interstitialAd.Provider);
             _onClose = null;
             _interstitialAd.Destroy();
         }

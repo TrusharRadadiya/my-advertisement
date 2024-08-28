@@ -39,12 +39,12 @@ namespace MyAdvertisement
             _controller.LoadInterstitialAd();
         }
 
-        public static void ShowAd(Action onClose)
+        public static void ShowAd(Action<AdsProvider> onClose)
         {
             if (InterstitialRemoved) return;
             if (!Initialized)
             {
-                onClose?.Invoke();
+                onClose?.Invoke(AdsProvider.Null);
                 return;
             }
             _controller.ShowInterstitialAd(onClose);

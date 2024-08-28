@@ -16,12 +16,12 @@ namespace MyAdvertisement
             set => PlayerPrefs.SetInt(nameof(BannerRemoved), value ? 1 : 0);
         }
         
-        public static event Action OnAdAvailable;
+        public static event Action<AdsProvider> OnAdAvailable;
         
         public static void Initialize(BannerAdsController controller)
         {
             _controller = controller;
-            _controller.OnAdAvailable += () =>
+            _controller.OnAdAvailable += provider =>
             {
                 if (BannerRemoved)
                 {
@@ -29,7 +29,7 @@ namespace MyAdvertisement
                     return;
                 }
                 
-                OnAdAvailable?.Invoke();
+                OnAdAvailable?.Invoke(provider);
             };
         }
 

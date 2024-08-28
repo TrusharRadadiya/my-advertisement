@@ -31,7 +31,7 @@ public class InterstitialAdPanelScript : MonoBehaviour
 
     public void OnShowInterstitialAdShowButtonClick()
     {
-        InterstitialAdsHandler.ShowAd(() => UpdateInterstitialAdStatus("Interstitial ad closed."));
+        InterstitialAdsHandler.ShowAd(provider => UpdateInterstitialAdStatus($"{provider} : Interstitial ad closed."));
         UpdateInterstitialAdStatus("Interstitial ad showing...");
     }
 

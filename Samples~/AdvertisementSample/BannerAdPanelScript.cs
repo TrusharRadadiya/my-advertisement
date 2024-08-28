@@ -17,13 +17,13 @@ public class BannerAdPanelScript : MonoBehaviour
         BannerAdsHandler.OnAdAvailable -= OnBannerAdAvailable;
     }
     
-    public void OnBannerAdAvailable() => UpdateBannerAdStatus("Banner ad loaded");
+    public void OnBannerAdAvailable(AdsProvider  provider) => UpdateBannerAdStatus($"{provider} : Banner ad loaded");
     
     public void OnLoadBannerAdButtonClick()
     {
         BannerAdsHandler.LoadAd();
 #if UNITY_EDITOR
-        OnBannerAdAvailable();
+        OnBannerAdAvailable(AdsProvider.Null);
 #else
         UpdateBannerAdStatus("Banner ad loading.");
 #endif

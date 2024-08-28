@@ -32,7 +32,7 @@ public class RewardedAdPanelScript : MonoBehaviour
     public void OnShowRewardedAdShowButtonClick()
     {
         RewardedAdsHandler.ShowAd(
-            () => UpdateRewardedAdStatus("Rewarded ad closed."),
+            provider => UpdateRewardedAdStatus($"{provider} : Rewarded ad closed."),
             () => UpdateRewardedAdStatus("Reward granted.")
         );
         UpdateRewardedAdStatus("Rewarded ad showing...");

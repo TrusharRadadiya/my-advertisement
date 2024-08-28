@@ -21,7 +21,7 @@ namespace MyAdvertisement
         private int _retryCount;
         private int _continueCount;
 
-        private Action _onClose;
+        private Action<AdsProvider> _onClose;
         private Action _onReward;
 
         public bool AdAvailable => _rewardedAd?.CurrentState is AdState.Loaded;
@@ -130,12 +130,12 @@ namespace MyAdvertisement
 
         public void OnRewardedAdLoadSuccess() => OnAdAvailable?.Invoke();
         
-        public void ShowRewardedAd(Action onClose, Action onReward)
+        public void ShowRewardedAd(Action<AdsProvider> onClose, Action onReward)
         {
             if (!_enabled)
             {
                 DestroyRewardedAd();
-                onClose?.Invoke();
+                onClose?.Invoke(AdsProvider.Null);
                 return;
             }
             
@@ -149,11 +149,11 @@ namespace MyAdvertisement
             {
                 case AdState.Null:
                     LoadRewardedAd();
-                    onClose?.Invoke();
+                    onClose?.Invoke(AdsProvider.Null);
                     break;
                 
                 case AdState.Loading:
-                    onClose?.Invoke();
+                    onClose?.Invoke(AdsProvider.Null);
                     break;
                 
                 case AdState.Loaded:
@@ -170,7 +170,7 @@ namespace MyAdvertisement
         
         public void OnRewardedAdShowFail()
         {
-            _onClose?.Invoke();
+            _onClose?.Invoke(AdsProvider.Null);
             _onClose = null;
             OnRewardedAdLoadFail();
         }
@@ -179,7 +179,7 @@ namespace MyAdvertisement
         {
             _continueCount++;
             _retryCount = 0;
-            _onClose?.Invoke();
+            _onClose?.Invoke(_rewardedAd.Provider);
             _onClose = null;
             _onReward = null;
             _rewardedAd.Destroy();

@@ -37,11 +37,11 @@ namespace MyAdvertisement
             _controller.LoadRewardedAd();
         }
 
-        public static void ShowAd(Action onClose, Action onReward)
+        public static void ShowAd(Action<AdsProvider> onClose, Action onReward)
         {
             if (!Initialized)
             {
-                onClose?.Invoke();
+                onClose?.Invoke(AdsProvider.Null);
                 return;
             }
             _controller.ShowRewardedAd(onClose, onReward);
