@@ -22,9 +22,9 @@ namespace MyAdvertisement
             AdConfigData configData = JsonConvert.DeserializeObject<AdConfigData>(data);
 #endif
 
-            GetComponent<BannerAdsController>().SetRemoteConfig(configData.BannerAdConfig);
-            GetComponent<InterstitialAdsController>().SetRemoteConfig(configData.InterstitialAdConfig);
-            GetComponent<RewardedAdsController>().SetRemoteConfig(configData.RewardedAdConfig);
+            GetComponent<BannerAdsController>()?.SetRemoteConfig(configData.BannerAdConfig);
+            GetComponent<InterstitialAdsController>()?.SetRemoteConfig(configData.InterstitialAdConfig);
+            GetComponent<RewardedAdsController>()?.SetRemoteConfig(configData.RewardedAdConfig);
         }
     }
 }
