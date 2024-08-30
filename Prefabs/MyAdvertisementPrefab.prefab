@@ -49,11 +49,11 @@ MonoBehaviour:
   - production
   _remoteConfigEnvironments:
   - <Name>k__BackingField: development
-    <ID>k__BackingField: 8e3df4d8-a378-4ea5-aae5-90eb3728c0d9
+    <ID>k__BackingField: 
   - <Name>k__BackingField: production
-    <ID>k__BackingField: ec083ccb-54cf-4965-9e25-2276d2c89e26
+    <ID>k__BackingField: 
   _selectedUGSEnvironment: development
-  _selectedEnvironmentID: 8e3df4d8-a378-4ea5-aae5-90eb3728c0d9
+  _selectedEnvironmentID: 
   OnDataFetched:
     m_PersistentCalls:
       m_Calls:
