@@ -15,6 +15,8 @@ namespace MyAdvertisement.Editor
         public void OnPreprocessBuild(BuildReport report)
         {
             GoogleMobileAdNetwork googleMobileAdNetwork = ScriptableObjectUtility.FindAsset<GoogleMobileAdNetwork>();
+            if (googleMobileAdNetwork is null) return;
+            
             string androidAppID = googleMobileAdNetwork.Testing ? googleMobileAdNetwork.TestAppID : googleMobileAdNetwork.AndroidAppID;
             string iOSAppID = googleMobileAdNetwork.Testing ? googleMobileAdNetwork.TestAppID : googleMobileAdNetwork.IOSAppID;
             
