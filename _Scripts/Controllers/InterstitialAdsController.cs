@@ -179,11 +179,11 @@ namespace MyAdvertisement
 
         public void OnInterstitialAdClose()
         {
+            _interstitialAd.Destroy();
             _continueCount++;
             _retryCount = 0;
             _onClose?.Invoke(_interstitialAd.Provider);
             _onClose = null;
-            _interstitialAd.Destroy();
         }
 
         public void DestroyInterstitialAd()

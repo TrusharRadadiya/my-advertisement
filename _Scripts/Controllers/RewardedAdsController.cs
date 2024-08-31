@@ -177,12 +177,12 @@ namespace MyAdvertisement
 
         public void OnRewardedAdClose()
         {
+            _rewardedAd.Destroy();
             _continueCount++;
             _retryCount = 0;
             _onClose?.Invoke(_rewardedAd.Provider);
             _onClose = null;
             _onReward = null;
-            _rewardedAd.Destroy();
         }
 
         public void OnRewardedAdGiveReward() => _onReward?.Invoke();
