@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace MyAdvertisement.Editor
 {
-    public class GoogleMobileAdsIDSetter: IPreprocessBuildWithReport
+    public class GoogleMobileAdsSettingsSetter: IPreprocessBuildWithReport
     {
         public int callbackOrder => -1;
         
@@ -27,9 +27,11 @@ namespace MyAdvertisement.Editor
 
             PropertyInfo androidAdIdInfo = type.GetProperty("GoogleMobileAdsAndroidAppId");
             PropertyInfo iOSAdIdInfo = type.GetProperty("GoogleMobileAdsIOSAppId");
+            PropertyInfo userTrackingDesInfo = type.GetProperty("UserTrackingUsageDescription");
             
             androidAdIdInfo.SetValue(obj, androidAppID);
             iOSAdIdInfo.SetValue(obj, iOSAppID);
+            userTrackingDesInfo.SetValue(obj, "Your data will be used to provide you a better and personalized ad experience.");
             EditorUtility.SetDirty(obj as Object);
         }
     }
