@@ -17,10 +17,14 @@ namespace MyAdvertisement
         private BannerAdBase _bannerAd;
         private bool _loadOnNetworkInitialize;
         private bool _showOnLoad;
-        private bool _shownOnce;
         private int _adCounter;
         private int _retryCount;
         private int _continueCount;
+
+        private bool _oneCycleComplete = false;
+        private bool _shownOnce = false;
+
+        private bool OneFailCycleComplete => _oneCycleComplete && !_shownOnce;
         
         public event Action<AdsProvider> OnAdAvailable;
         
@@ -82,7 +86,7 @@ namespace MyAdvertisement
         
         public void LoadBannerAd()
         {
-            if (!_enabled) return;
+            if (!_enabled || OneFailCycleComplete) return;
             if (!CheckAdNetworkInitialization())
             {
                 _loadOnNetworkInitialize = true;
@@ -113,6 +117,7 @@ namespace MyAdvertisement
             // All the banners are used.
             if (_adCounter == _adSettings.Count)
             {
+                _oneCycleComplete = true;
                 _adCounter = 0;
                 SetAdSettings();
                 
