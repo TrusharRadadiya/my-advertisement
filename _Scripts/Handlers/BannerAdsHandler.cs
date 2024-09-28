@@ -35,8 +35,7 @@ namespace MyAdvertisement
 
         public static void LoadAd()
         {
-            if (BannerRemoved) return;
-            if (!Initialized) return;
+            if (BannerRemoved || !Initialized) return;
             _controller.LoadBannerAd();
         }
 
@@ -49,15 +48,14 @@ namespace MyAdvertisement
 
         public static void ShowAd()
         {
-            if (BannerRemoved) return;
-            if (!Initialized) return;
+            if (BannerRemoved || !Initialized) return;
             _controller.ShowBannerAd();
             Showing = true;
         }
 
         public static void HideAd()
         {
-            if (!Initialized) return;
+            if (BannerRemoved || !Initialized) return;
             _controller.HideBannerAd();
             Showing = false;
         }

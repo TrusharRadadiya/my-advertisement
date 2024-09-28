@@ -33,13 +33,13 @@ namespace MyAdvertisement
 
         public static void LoadAd()
         {
-            if (!Initialized) return;
+            if (RewardedRemoved || !Initialized) return;
             _controller.LoadRewardedAd();
         }
 
         public static void ShowAd(Action<AdsProvider> onClose, Action onReward)
         {
-            if (!Initialized)
+            if (RewardedRemoved || !Initialized)
             {
                 onClose?.Invoke(AdsProvider.Null);
                 return;
